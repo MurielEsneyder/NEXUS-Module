@@ -1,0 +1,95 @@
+@use '@angular/material' as mat;
+
+// Definición de paletas personalizadas
+$mat-asmet-green: (
+    50: #96eaec,
+    100: #61c8cc,
+    200: #60cace,
+    300: #50b7bb,
+    400: #42b4b8,
+    500: #40b2b6,
+    600: #34b1b6,
+    700: #2a9da0,
+    800: #1f6d70,
+    900: #164e50,
+    A100: #a1e4e6,
+    A200: #69d3d6,
+    A400: #2eafb3,
+    A700: #2a9da0,
+    contrast: (50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: rgba(black, 0.87),
+        400: rgba(black, 0.87),
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: rgba(black, 0.87),
+        A400: rgba(black, 0.87),
+        A700: rgba(black, 0.87),
+    )
+);
+
+$mat-asmet-red: (
+    50: #ec8f8f,
+    100: #da6b6b,
+    200: #d85c5c,
+    300: #c94949,
+    400: #c24646,
+    500: #b33636,
+    600: #af3737,
+    700: #981e1e,
+    800: #801818,
+    900: #691515,
+    A100: #df7979,
+    A200: #da5757,
+    A400: #b82f2f,
+    A700: #981e1e,
+    contrast: (50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: rgba(black, 0.87),
+        400: rgba(black, 0.87),
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: rgba(black, 0.87),
+        A400: rgba(black, 0.87),
+        A700: rgba(black, 0.87),
+    )
+);
+
+// Configuración de tipografía personalizada
+$custom-typography: mat.m2-define-typography-config($font-family: 'Muli, sans-serif',
+        $headline: (
+        font-family: 'Muli, sans-serif',
+        font-size: 32px,
+        line-height: 48px,
+        font-weight: 700),
+    $body: (
+        font-family: 'Muli, sans-serif',
+        font-size: 16px,
+        line-height: 24px,
+        font-weight: 600)
+    );
+
+// Crear paletas
+$asmet-primary: mat.define-palette($mat-asmet-green);
+$asmet-accent: mat.define-palette($mat-asmet-red, A700, A100, A400);
+$asmet-warn: mat.define-palette(mat.$red-palette);
+
+// Crear tema
+$asmet-theme: mat.define-light-theme((color: (primary: $asmet-primary,
+                accent: $asmet-accent,
+                warn: $asmet-warn ),
+            typography: $custom-typography));
+
+// Incluir estilos de tema
+@include mat.core();
+@include mat.all-component-themes($asmet-theme);

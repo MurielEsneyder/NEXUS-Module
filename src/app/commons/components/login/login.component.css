@@ -1,0 +1,46 @@
+.bg-auth {
+    height: calc(100vh - 24px);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    z-index: 10000;
+}
+
+.login-card {
+    max-width: 400px;
+    min-width: 300px;
+}
+
+.login-card-content {
+    width: 90%;
+}
+
+.form_input {
+    margin: 20px;
+    width: 100%;
+}
+
+.container-button{
+  display: flex;
+   justify-content: center;
+}
+.color-icon{
+  color: #2e8b8e;
+}
+.button-color{
+  background-color: #2e8b8e;
+   border-color: #2e8b8e;
+}
+.button-color:active {
+  background-color: #2e8b8e;
+   border-color: #2e8b8e;
+}

@@ -1,0 +1,126 @@
+.hl-app {
+  min-height: 100%;
+}
+
+.img-responsive {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+.btn {
+  color: white;
+  font-size: 20px;
+  margin-top: -5px;
+}
+.btn:hover {
+  background-color: #5bc7ca;
+}
+
+.bg-light{
+  z-index: 1;
+  background-color: #38a0a3 !important;
+  transition: background-color 500ms linear;
+}
+
+.bg-dark{
+  z-index: 1;
+  background-color: #001b2d !important;
+  transition: background-color 500ms linear;
+}
+input:disabled {
+  background: #ccc;
+}
+
+
+
+.nav-item {
+  position: absolute;
+  font-weight: bold;
+  color: white;
+  top: 8px;
+
+  a {
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+  }
+
+  mat-icon {
+    margin-right: 5px;
+  }
+}
+
+.active-route {
+  font-weight: bold;
+  color: white;
+  position: relative;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.menu-button {
+  position: absolute;
+  left: 0;
+  color: white;
+  background-color: #40b2b6;
+  height: 36px;
+  width: 95px;
+  padding: 5px 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .menu-icon {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    background-color: darken(#40b2b6, 10%);
+  }
+}
+.user-info {
+  position: absolute;
+  font-weight: bold;
+  color: white;
+  top: 6px;
+  left: calc(100vw - 340px);
+  width: 180px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+
+  .user-icon {
+    margin-right: 10px;
+  }
+}
+
+ .logout-button {
+  position: absolute;
+  left: calc(100vw - 140px);
+  font-size: 16px;
+  height: 36px;
+  width: 95px;
+  padding-left: 5px;
+  padding-top: 5px;
+  background-color: #b33636;
+  color: white;
+  /*display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .logout-icon {
+    margin-left: 10px;
+  }
+*/
+  &:hover {
+    background-color: darken(#b33636, 10%);
+  } 
+} 
+

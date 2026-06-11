@@ -1,0 +1,104 @@
+<div class="hl-app">
+  <div
+    style="height: 36px"
+    align="center"
+    [ngClass]="{
+      'ant-dark': guiOptions.darkMode,
+      'ant-green': !guiOptions.darkMode
+    }"
+  >
+    <!-- Botón de menú (con tooltip) -->
+    <span
+      class="menu-button"
+      (mouseenter)="menuMouseEvent(true)"
+      matTooltip="menú (alt+m)"
+      (click)="menuMouseEvent(false)"
+    >
+      <mat-icon *ngIf="drawer.opened" class="menu-icon">menu_fold</mat-icon>
+      <mat-icon *ngIf="!drawer.opened" class="menu-icon">menu_unfold</mat-icon>
+      menú
+    </span>
+
+    <!-- Enlace a Inicio (con tooltip) -->
+    <span class="nav-item" style="left: 110px">
+      <a routerLink="/hyl/inicio" mat-icon-button matTooltip="Inicio (alt+h)">
+        <mat-icon>home</mat-icon>
+      </a>
+    </span>
+
+    <!-- Enlace a Búsqueda de afiliado (con tooltip) -->
+    <span class="nav-item" style="left: 156px">
+      <a
+        routerLink="/hyl/inicio"
+        mat-icon-button
+        matTooltip="Búsqueda de afiliado"
+      >
+        <mat-icon>monitor</mat-icon>
+      </a>
+    </span>
+
+    <!-- Enlace a Dashboard (con tooltip) -->
+    <span class="nav-item" style="left: 202px">
+      <a routerLink="/hyl/inicio" mat-icon-button matTooltip="Dashboard">
+        <mat-icon>dashboard</mat-icon>
+      </a>
+    </span>
+
+    <!-- Ruta activa (con tooltip y toggle de drawer) -->
+    <span
+      class="active-route"
+      matTooltip="{{ fullActiveRoute }}"
+      (click)="drawer.toggle()"
+    >
+      {{ activeRoute }}
+    </span>
+
+    <!-- Información del usuario (con tooltip) -->
+    <span class="user-info" matTooltip="{{ userSession.username }}">
+      <mat-icon class="user-icon" aria-hidden="true">person</mat-icon>
+      {{ userSession.username }}
+    </span>
+
+    <!-- Cerrar sesión (con tooltip) -->
+    <span
+      class="logout-button"
+      (click)="logout()"
+      matTooltip="Cerrar sesión en H&L"
+    >
+      salir
+      <mat-icon class="logout-icon" aria-hidden="true">exit_to_app</mat-icon>
+    </span>
+  </div>
+
+  <!-- Mat Drawer Container -->
+  <mat-drawer-container
+    style="height: calc(100vh - 36px)"
+    [ngClass]="{
+      'bg-dark': guiOptions.darkMode,
+      'bg-light': !guiOptions.darkMode
+    }"
+    [hasBackdrop]="false"
+    class="bg-gradient"
+  >
+    <mat-drawer
+      class="asmet-green-bg"
+      #drawer
+      mode="side"
+      opened="true"
+      [ngClass]="{
+        'ant-dark': guiOptions.darkMode,
+        'ant-light': !guiOptions.darkMode
+      }"
+      (mouseleave)="menuHide()"
+      style="width: auto; min-width: 200px; border-radius: 0%"
+    >
+      <global-menu [options]="guiOptions"></global-menu>
+    </mat-drawer>
+
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
+
+<!-- Menu desplegable -->

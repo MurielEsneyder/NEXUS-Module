@@ -1,0 +1,91 @@
+@import '~@angular/material/theming';
+// @import 'node_modules/@angular/material/theming';
+@include mat-core();
+
+$mat-asmet-green: (
+  50: #96eaec,
+  100: #61c8cc,
+  200: #60cace,
+  300: #50b7bb,
+  400: #42b4b8,
+  500: #40b2b6,
+  600: #34b1b6,
+  700: #2a9da0,
+  800: #1f6d70,
+  900: #164e50,
+  A100: #a1e4e6,
+  A200: #69d3d6,
+  A400: #2eafb3,
+  A700: #2a9da0,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  )
+);
+
+
+$mat-asmet-red: (
+  50: #ec8f8f,
+  100: #da6b6b,
+  200: #d85c5c,
+  300: #c94949,
+  400: #c24646,
+  500: #b33636,
+  600: #af3737,
+  700: #981e1e,
+  800: #801818,
+  900: #691515,
+  A100: #df7979,
+  A200: #da5757,
+  A400: #b82f2f,
+  A700: #981e1e,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  )
+);
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Muli, sans-serif',
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 600)
+);
+
+$asmet-primary: mat-palette($mat-asmet-green);
+$asmet-accent: mat-palette($mat-asmet-red, A700, A100, A400);
+// The warn palette is optional (defaults to red).
+$asmet-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$asmet-theme: mat-light-theme($asmet-primary, $asmet-accent, $asmet-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($asmet-theme);
+@include angular-material-typography($custom-typography);
+@include mat-core($custom-typography);

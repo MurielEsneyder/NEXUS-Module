@@ -1,0 +1,102 @@
+<!-- RUTA: src/app/solicitudes-desarrollo/components/solicitudes-desarrollo/solicitudes-desarrollo.component.html -->
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Solicitudes de Desarrollo</h2>
+    <button class="btn btn-primary" (click)="nuevaSolicitud()">
+      + Nueva Solicitud
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Solicitante</th>
+          <th>Área</th>
+          <th>Prioridad</th>
+          <th>Estado</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of solicitudes">
+          <td>{{ s.id }}</td>
+          <td>{{ s.titulo }}</td>
+          <td>{{ s.solicitante }}</td>
+          <td>{{ s.area }}</td>
+          <td><span [class]="'badge ' + getPrioridadClase(s.prioridad)">{{ s.prioridad }}</span></td>
+          <td><span [class]="'badge ' + getEstadoClase(s.estado)">{{ s.estado }}</span></td>
+          <td>{{ s.fechaCreacion | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-1" (click)="editar(s)">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="eliminar(s.id!)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [class.show]="mostrarFormulario" tabindex="-1" [style.display]="mostrarFormulario ? 'block' : 'none'">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ modoEdicion ? 'Editar' : 'Nueva' }} Solicitud de Desarrollo</h5>
+          <button type="button" class="btn-close" (click)="cerrarFormulario()"></button>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Título *</label>
+                <input type="text" class="form-control" [(ngModel)]="solicitudSeleccionada.titulo" name="titulo" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Solicitante *</label>
+                <input type="text" class="form-control" [(ngModel)]="solicitudSeleccionada.solicitante" name="solicitante" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Área</label>
+                <input type="text" class="form-control" [(ngModel)]="solicitudSeleccionada.area" name="area">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Prioridad</label>
+                <select class="form-select" [(ngModel)]="solicitudSeleccionada.prioridad" name="prioridad">
+                  <option value="baja">Baja</option>
+                  <option value="media">Media</option>
+                  <option value="alta">Alta</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Estado</label>
+                <select class="form-select" [(ngModel)]="solicitudSeleccionada.estado" name="estado">
+                  <option value="pendiente">Pendiente</option>
+                  <option value="en progreso">En progreso</option>
+                  <option value="completada">Completada</option>
+                  <option value="rechazada">Rechazada</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha límite</label>
+                <input type="date" class="form-control" [(ngModel)]="solicitudSeleccionada.fechaLimite" name="fechaLimite">
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="solicitudSeleccionada.descripcion" name="descripcion"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarFormulario()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="mostrarFormulario" class="modal-backdrop fade show"></div>
+</div>

@@ -1,0 +1,51 @@
+<img src="assets/img/hyl_nxt80.png"
+     style="width: 200px; margin: 8px 20px 4px 20px;"
+     [ngClass]="{'saturate-img': guiOptions.darkMode}"
+     alt="Logo HyL">
+
+<p *ngIf="menus?.length === 0" class="full-width fix-to-center">Cargando menú...</p>
+
+<ul *ngIf="menus && menus.length > 0" class="nav flex-column" style="width: 100%; padding: 0;">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menus }"></ng-container>
+
+  <ng-template #menuTpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <!-- Si el menú no tiene submenús -->
+      <li *ngIf="!menu.children?.length" class="nav-item" [ngClass]="{'disabled': menu.disabled}">
+        <a class="nav-link"
+           [routerLink]="menu.url"
+           routerLinkActive="active"
+           [ngClass]="{'text-dark': guiOptions.darkMode, 'text-decoration-none': true}">
+          <i *ngIf="getPermission(menu.roles)" class="bi" [ngClass]="menu.icon" aria-hidden="true">
+          </i>
+          <span class="align-text-bottom"> <mat-icon> {{menu.icon}}</mat-icon>{{ menu.title }}</span>
+
+        </a>
+      </li>
+
+      <!-- Si el menú tiene submenús (Dropdown) -->
+      <li *ngIf="menu.children?.length" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle"
+           href="javascript:void(0);"
+           id="navbarDropdown"
+           role="button"
+           [attr.aria-expanded]="menu.open ? 'true' : 'false'"
+           (click)="toggleDropdown(menu)">
+
+          <i *ngIf="getPermission(menu.roles)" class="bi" [ngClass]="menu.icon" aria-hidden="true">{{menu.icon}}</i>
+
+          <span class="align-text-bottom"> <mat-icon> {{menu.icon}}</mat-icon>{{ menu.title }}</span>
+          <!-- Flecha solo para submenús -->
+          <i class="bi ms-2"
+             [ngClass]="{'rotate-180': menu.open}"
+             aria-hidden="true"></i> <!-- Rotar la flecha cuando se abra -->
+        </a>
+
+        <!-- Submenú con clase 'collapse' -->
+        <ul [ngClass]="{'collapse': !menu.open, 'nav flex-column ms-3': true}" style="width: 100%; padding: 0;">
+          <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ng-template>
+</ul>

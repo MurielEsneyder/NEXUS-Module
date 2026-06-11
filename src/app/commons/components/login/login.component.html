@@ -1,0 +1,90 @@
+<div class="bg-auth ant-green-login bg-gradient-login">
+  <mat-grid-list cols="1" rowHeight="100%">
+    <mat-grid-tile>
+      <mat-card style="max-width: 800px; width: 100%;">
+        <mat-grid-list cols="2">
+          <mat-grid-tile>
+            <img
+              src="assets/img/hyl_nxt80.png"
+              style="width: 300px"
+              alt="Logo HyL"
+            />
+            <div style="width: 100%; position: absolute; bottom: 10px">
+              <img
+                src="assets/img/asmet_logo.png"
+                style="height: 30px; display: block; margin: auto"
+                alt="Logo HylL"
+              />
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-card class="login-card bg-ultrasoft-gray transparent-card">
+              <div class="title">
+                <h3 class="asmet-green">Inicio de sesión</h3>
+              </div>
+              <form
+                [formGroup]="loginForm"
+                name="loginForm"
+                (ngSubmit)="loginUser()"
+              >
+                <mat-card-content class="login-card-content">
+                  <mat-form-field class="form_input">
+                    <mat-label>Nombre de usuario</mat-label>
+                    <input
+                      matInput
+                      required
+                      placeholder="Ingrese aquí su número de documento"
+                      autocomplete="on"
+                      [formControl]="loginControls.numeroDocumento"
+                    />
+                    <mat-error
+                      *ngIf="loginControls.numeroDocumento.hasError('required')"
+                      >El número de documento es necesario
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        loginControls.numeroDocumento.hasError('incorrect')
+                      "
+                    >
+                      Verifique el número de documento
+                    </mat-error>
+                    <mat-icon matSuffix class="color-icon">perm_identity</mat-icon>
+                  </mat-form-field>
+
+                  <mat-form-field class="form_input">
+                    <mat-label>Contraseña</mat-label>
+                    <input
+                      matInput
+                      required
+                      type="password"
+                      placeholder="Digite su contraseña"
+                      autocomplete="off"
+                      [formControl]="loginControls.password"
+                    />
+                    <mat-error
+                      *ngIf="loginControls.password.hasError('required')"
+                      >La contraseña es necesaria para iniciar sesión
+                    </mat-error>
+                    <mat-error
+                      *ngIf="loginControls.password.hasError('incorrect')"
+                      >Verifique la contraseña
+                    </mat-error>
+                    <mat-icon matSuffix class="color-icon">vpn_key</mat-icon>
+                  </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions class="container-button">
+                  <button class="btn btn-primary button-color"  [disabled]="!loginForm.valid">
+                    ingresar
+                  </button>
+                </mat-card-actions>
+              </form>
+            </mat-card>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div class="fix-to-center">
+  &copy; h&l-Sparta-v2 Since 2025 Asmet Salud EPS SAS - Derechos reservados.
+</div>

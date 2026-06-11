@@ -1,0 +1,24 @@
+/* RUTA: src/app/solicitudes-desarrollo/components/solicitudes-desarrollo/solicitudes-desarrollo.component.css */
+
+.container {
+  max-width: 1400px;
+}
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.bg-danger { background-color: #dc3545; color: white; }
+.bg-warning { background-color: #ffc107; color: black; }
+.bg-success { background-color: #28a745; color: white; }
+.bg-info { background-color: #17a2b8; color: white; }
+.bg-secondary { background-color: #6c757d; color: white; }
+
+.modal.show {
+  display: block;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-backdrop {
+  z-index: 1040;
+}

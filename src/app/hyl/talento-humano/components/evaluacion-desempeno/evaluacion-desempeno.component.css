@@ -1,0 +1,129 @@
+mat-button-toggle-group {
+  margin-left: 12px;
+}
+
+.custom-divider {
+  /* Verifica que el divisor tenga un alto adecuado */
+  height: 1px;
+  background-color: #d1cfcf !important;/* Asegúrate de que tenga un color de fondo */
+  margin-bottom: 30px;
+}
+
+table {
+  width: 100%;
+  /* max-width: 100%; */
+  min-height: 80%;
+  margin-top: 20px;
+}
+
+
+.container-principal{
+  width: 99%;
+  min-height: 100%;
+}
+
+.mat-card-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-card-content{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.button-group{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.table{
+  max-height: 400px;
+  overflow: auto;
+}
+
+
+.container-tres{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap:30px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.container-tres-cajas{
+  border: 2px solid lightblue;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  box-shadow: 2px 2px 10px white;
+  min-width: 300px;
+}
+
+.container-cuatro-title{
+  text-align: center;
+}
+
+.container-cuatro-escala-calificacion{
+  display: flex; justify-content: space-evenly;
+}
+
+
+
+/* Contenedor principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Alinea desde arriba */
+  padding: 20px;
+  gap: 20px; /* Espaciado entre items */
+}
+
+/* Estilo para cada item del cuestionario */
+.item-cuestionario {
+  background-color: #f9f9f9; /* Fondo claro */
+  border: 1px solid #ddd; /* Borde sutil */
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaciado entre elementos */
+}
+
+/* Estilo del encabezado de ponderación y descripción */
+.ponderado-descripcion {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Estilo para las preguntas dentro de cada respuesta */
+.respuesta {
+  margin-left: 20px; /* Alineación de las respuestas con las preguntas */
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Estilo para las preguntas */
+.pregunta {
+  font-style: italic;
+  color: #444;
+}
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+.button-toggle-group-principal {
+  display: flex; flex-wrap: wrap; justify-content: center;
+}
+.option-toggle {
+  flex: 1 1 auto; min-width: 150px; text-align: center;
+}
+

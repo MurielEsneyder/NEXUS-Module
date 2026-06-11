@@ -1,0 +1,34 @@
+/* Esto elimina el subrayado y cambia el color de los enlaces */
+
+.nav-link {
+  text-decoration: none; /* Elimina el subrayado */
+  color: #333; /* Establece el color del texto a gris oscuro */
+}
+
+/* Cambia el color de los enlaces cuando se pasa el mouse por encima */
+.nav-link:hover {
+  color: #34b1b6; /* O cualquier color que prefieras */
+}
+
+.nav-link.active {
+  color: #34b1b6 !important; /* color de texto cuando la opción es seleccionada */
+}
+
+/* Si el modo oscuro está habilitado */
+body.dark-mode .nav-link {
+  color: #ccc !important; /* Cambia el color del texto en modo oscuro */
+}
+
+body.dark-mode .nav-link:hover {
+  color: #34b1b6 !important; /* Cambia el color del texto al pasar el mouse */
+}
+
+
+/* Rotación de la flecha hacia abajo cuando el submenú está abierto */
+.rotate-180 {
+  transform: rotate(180deg) !important;
+  transition: transform 0.3s ease; /* Suaviza la rotación */
+}
+/*
+ancho de menu
+ */

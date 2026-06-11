@@ -1,0 +1,376 @@
+<mat-card class="container-principal" appearance="outlined">
+  <mat-card-header class="mat-card-header"
+    ><h6>Bienvenidos a Evaluacion de Desempeño</h6></mat-card-header
+  >
+  <mat-divider class="custom-divider"></mat-divider>
+
+  <mat-card-content class="mat-card-content">
+
+    <div *ngIf="rol_si_evaldesempeno_niv1">
+      <div class="button-group">
+        <mat-button-toggle-group
+          name="fontStyle"
+          aria-label="Font Style"
+          style="width: auto"
+          class="button-toggle-group-principal"
+        >
+          <mat-button-toggle class="option-toggle"
+          *ngFor="let cargos of filtroFinalEvaluadores"
+           (click)="consultarPersonal(cargos.idListaValor)"
+            >{{cargos.descripcionArea}}</mat-button-toggle
+          >
+        </mat-button-toggle-group>
+      </div>
+
+      <div class="mat-elevation-z8 table" >
+        <table mat-table [dataSource]="dataSource">
+
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="Nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.nombre }} {{ element.primerApellido }}
+              {{ element.segundoApellido }}
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="Cargo">
+            <th mat-header-cell *matHeaderCellDef>Cargo</th>
+            <td mat-cell *matCellDef="let element">{{ element.cargoNombre }}</td>
+          </ng-container>
+
+          <!-- calificacionEvaluacion Column -->
+          <ng-container matColumnDef="EvaluacionCompetencias">
+            <th mat-header-cell *matHeaderCellDef>30% Evaluacion Competencias</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 1) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EvaluacionDesempeno">
+            <th mat-header-cell *matHeaderCellDef>70% Evaluacion Desempeño</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 2) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EvaluacionCompetenciasAuto">
+            <th mat-header-cell *matHeaderCellDef style="color: #34b1b6;">30% Evaluacion Competencias (Auto)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 3) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EvaluacionDesempenoAuto">
+            <th mat-header-cell *matHeaderCellDef style="color: #34b1b6;" >70% Evaluacion Desempeño (Auto)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 4) }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Total">
+            <th mat-header-cell *matHeaderCellDef style="color: #34b1b6;" >Total</th>
+            <td mat-cell *matCellDef="let element">
+              {{ resultadoTotal(element) }}%
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-raised-button
+                matTooltip="Evaluar"
+                style="text-align: center; line-height: 36px"
+                (click)="openDialog(element,1)"
+              >
+                <mat-icon
+                  fontSet="material-icons"
+                  style="font-size: 20px; color: #34b1b6"
+                  >check_circle</mat-icon
+                >
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+
+      <div class="container-tres">
+        <div class="container-tres-cajas">
+          <p>
+            Sumatoria, Evaluación de Competencias
+            <strong>{{ sumatoriaCompetencia }} %</strong>
+          </p>
+        </div>
+        <div class="container-tres-cajas">
+          <p>
+            Sumatoria, Evaluación de Desempeño
+            <strong>{{ sumatoriaDesempeno }} %</strong>
+          </p>
+        </div>
+
+        <div class="container-tres-cajas">
+          <p>
+            Sumatoria, Evaluación de Competencias (Auto)
+            <strong>{{ sumatoriaCompetenciaAuto }} %</strong>
+          </p>
+        </div>
+
+        <div class="container-tres-cajas">
+          <p>
+            Sumatoria, Evaluación de Desempeño (Auto)
+            <strong>{{ sumatoriaDesempenoAuto }} %</strong>
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <br />
+
+    <div *ngIf="rol_si_evaldesempeno_niv0">
+      <div style="display: flex; justify-content: center;">
+        <h6>Autoevaluación</h6>
+      </div>
+      <!-- tabla autoevaluacion -->
+      <div class="mat-elevation-z8 table">
+        <table mat-table [dataSource]="dataSourceAutoEvalauacion">
+          <!-- Position Column -->
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.nombre }} {{ element.primerApellido }}
+              {{ element.segundoApellido }}
+            </td>
+          </ng-container>
+
+          <!-- area Column -->
+          <ng-container matColumnDef="Cargo">
+            <th mat-header-cell *matHeaderCellDef>Cargo</th>
+            <td mat-cell *matCellDef="let element">{{ element.cargoNombre }}</td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="EvaluacionCompetenciasAuto">
+            <th mat-header-cell *matHeaderCellDef style="color: #34b1b6;">30% Evaluacion Competencias (Auto)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 3) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EvaluacionDesempenoAuto">
+            <th mat-header-cell *matHeaderCellDef style="color: #34b1b6;" >70% Evaluacion Desempeño (Auto)</th>
+            <td mat-cell *matCellDef="let element">
+              {{ obtenerPorcentaje(element, 4) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-raised-button
+                matTooltip="Evaluar"
+                style="text-align: center; line-height: 36px"
+                (click)="openDialog(element,0)"
+              >
+                <mat-icon
+                  fontSet="material-icons"
+                  style="font-size: 20px; color: #34b1b6"
+                  >check_circle</mat-icon
+                >
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsAutoevaluacion"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsAutoevaluacion"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+   </div>
+
+    <!--  -->
+  </mat-card-content>
+</mat-card>
+
+
+
+<!-- Contenido del diálogo -->
+<ng-template #dialogContent let-data>
+  <h6 mat-dialog-title class="container-cuatro-title">
+    Bienvenidos a la Evaluacion de Desempeño
+  </h6>
+
+  <div mat-dialog-content>
+    <div class="container-cuatro-escala-calificacion">
+      <div>
+        <p>
+          <strong
+            >{{ data.nombre }} {{ data.primerApellido }}
+            {{ data.segundoApellido }}
+          </strong>
+          , {{ data.cargoNombre }}
+        </p>
+      </div>
+      <div>
+        <p>
+          <span>Realizar la evaluación de 1 a 5, donde:</span><br />
+          1. Muy por debajo de lo esperado. 2. Por debajo de lo esperado. <br />
+          3. Lo esperado. 4. Por arriba de lo esperado. <br />
+          5. Muy por arriba de lo esperado.
+        </p>
+      </div>
+    </div>
+    <div class="button-group">
+      <mat-button-toggle-group
+        name="fontStyle"
+        aria-label="Font Style"
+        class="button-toggle-group-principal"
+
+      >
+        <mat-button-toggle class="option-toggle"
+        *ngFor="let cuestionario of cuestionarioTemporal; let i = index"
+          (click)="listarItemCuestionario(cuestionario.idCuestionario, data)"
+        >
+          {{ cuestionario.porcentaje }}% {{ cuestionario.descripcion }}
+        </mat-button-toggle>
+
+
+      </mat-button-toggle-group>
+    </div>
+    <!-- stepper -->
+
+    <mat-stepper #stepper="matStepper" orientation="vertical" [linear]="true">
+      <form
+        [formGroup]="form"
+        *ngIf="dataItems.length > 0 && !visualizarInformacion && isAutoEvaluacion"
+      >
+        <mat-step
+          *ngFor="let item of dataItems; let i = index; trackBy: trackByStep"
+          [completed]="isStepValid(i)"
+          [editable]="isStepValid(i)"
+        >
+          <ng-template matStepLabel
+            >{{ item.data.valorPonderado }}%
+            {{ item.data.descripcion }}</ng-template
+          >
+          <ng-template matStepContent>
+            <div *ngFor="let pre of item.preguntas; let j = index">
+              <p>{{ j + 1 }}. {{ pre.pregunta }}</p>
+              <mat-radio-group
+                [formControlName]="pre.idPregunta.toString()"
+                [id]="pre.idPregunta.toString()"
+                aria-label="Select an option"
+              >
+                <mat-radio-button
+                  *ngFor="let valor of escalaCalificacion"
+                  [value]="valor"
+                >
+                  {{ valor }}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <ng-container *ngIf="i > 0">
+              <button mat-button matStepperPrevious style="color: #34b1b6">
+                Atras
+              </button>
+            </ng-container>
+            <ng-container *ngIf="i < dataItems.length - 1">
+              <button
+                mat-button
+                matStepperNext
+                style="color: #34b1b6"
+                [disabled]="!isStepValid(i)"
+              >
+                Siguiente
+              </button>
+            </ng-container>
+            <ng-container *ngIf="i == dataItems.length - 1">
+              <button
+                mat-flat-button
+                (click)="validarFormulario(data)"
+                [disabled]="form.invalid"
+                style="background-color: #34b1b6; color: white"
+              >
+                Guardar
+              </button>
+            </ng-container>
+          </ng-template>
+        </mat-step>
+      </form>
+    </mat-stepper>
+
+    <!-- visualizar informacion de personal evaluado -->
+
+    <div class="container" *ngIf="visualizarInformacion">
+      <div
+        *ngFor="let dataP of respuestas['itemsCuestionario']"
+        class="item-cuestionario"
+      >
+        <p class="ponderado-descripcion">
+          <strong
+            >{{ dataP["valorPonderado"] }}% {{ dataP["descripcion"] }}</strong
+          >
+        </p>
+
+        <div
+          *ngFor="let res of dataP['respuestas']; index as i"
+          class="respuesta"
+        >
+          <p class="pregunta">{{ i + 1 }}. {{ res["pregunta"]["pregunta"] }}</p>
+          <p><strong>Rpta:</strong> {{ res["respuesta"] }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" *ngIf="!isAutoEvaluacion">
+      <div class="item-cuestionario">
+        <p>
+          <strong
+            >{{ data.nombre }} {{ data.primerApellido }}
+            {{ data.segundoApellido }}
+          </strong>
+          , {{ data.cargoNombre }} no ha realizado su autoevaluacion
+        </p>
+      </div>
+
+    </div>
+
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </div>
+</ng-template>
