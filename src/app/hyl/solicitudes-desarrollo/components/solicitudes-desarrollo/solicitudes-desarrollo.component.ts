@@ -329,6 +329,13 @@ export class SolicitudesDesarrolloComponent implements OnInit {
   volverPrincipal(): void {
     this.vistaActual = 'principal';
   }
+  // Agrega este método
+  irAtras(): void {
+    // Esto redirige a la página anterior en el historial del navegador
+    window.history.back();
+    // Alternativa: si quieres ir a una ruta específica
+    // this.router.navigate(['/']); // Redirige a la raíz
+  }
 
   // ============================================================
   // NAVEGACIÓN ENTRE PASOS DEL WIZARD
@@ -622,3 +629,4 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     return solicitud.estado === 'En documentación' || solicitud.estado === 'Pendiente';
   }
 }
+

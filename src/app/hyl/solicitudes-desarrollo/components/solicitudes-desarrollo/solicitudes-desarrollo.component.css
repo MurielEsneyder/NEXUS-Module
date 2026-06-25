@@ -21,7 +21,7 @@
 
   --white: #ffffff;
   --shadow: 0 2px 8px rgba(0,0,0,0.1);
-  --border-radius: 8px;
+  --border-radius: 1px;
 }
 
 .container {
@@ -52,8 +52,8 @@
   background: #ffffff;
   width: 100%;
   max-width: 850px;
-  padding: 50px;
-  border-radius: 20px;
+  padding: 80px;
+  border-radius: 1px;
   box-shadow: 0 10px 35px rgba(0, 169, 171, 0.15);
   border-top: 6px solid var(--primary-blue);
 }
@@ -446,21 +446,21 @@
 .exito-titulo {
   font-size: 16px;
   font-weight: 700;
-  color: #c00;
+  color: #186b66;
   margin: 0 0 10px;
   line-height: 1.5;
 }
 
 .exito-subtitulo {
   font-size: 14px;
-  color: #c00;
+  color: #186b66;
   margin-bottom: 16px;
 }
 
 .exito-numero {
   font-size: 18px;
   font-weight: 700;
-  color: #c00;
+  color: #186b66;
 }
 
 /* ============================================================
@@ -1342,5 +1342,175 @@
   .tabla-bandeja th,
   .tabla-bandeja td {
     padding: 6px 4px;
+  }
+}
+
+/* ============================================================ */
+/* BANDEJA - HEADER CON BOTONES ALINEADOS */
+/* ============================================================ */
+
+.bandeja-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bandeja-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Botón Volver de la bandeja (con clase específica) */
+.btn-volver-bandeja {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #1565C0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-volver-bandeja:hover {
+  background: #e3f2fd;
+}
+
+.btn-volver-bandeja mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.btn-volver-bandeja span {
+  font-size: 14px;
+}
+
+.bandeja-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bandeja-titulo h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #1a1a2e;
+}
+
+.total-solicitudes {
+  background: #e8ecf1;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+}
+
+.btn-nueva {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btn-nueva:hover {
+  background: #1b5e20;
+}
+
+/* ============================================================ */
+/* ACCIONES DE TABLA ALINEADAS */
+/* ============================================================ */
+
+.acciones-header {
+  text-align: center;
+  min-width: 100px;
+}
+
+.acciones-cell {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-accion:hover {
+  background: #f0f0f0;
+}
+
+.btn-ver:hover { background: #e3f2fd; }
+.btn-editar:hover { background: #fff3e0; }
+.btn-eliminar:hover { background: #ffebee; }
+
+/* ============================================================ */
+/* RESPONSIVE */
+/* ============================================================ */
+
+@media (max-width: 768px) {
+  .bandeja-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bandeja-header-left {
+    flex-wrap: wrap;
+  }
+
+  .btn-volver-bandeja {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .bandeja-titulo h2 {
+    font-size: 18px;
+  }
+
+  .btn-nueva {
+    justify-content: center;
+  }
+
+  .acciones-cell {
+    gap: 2px;
+  }
+
+  .btn-accion {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
   }
 }
