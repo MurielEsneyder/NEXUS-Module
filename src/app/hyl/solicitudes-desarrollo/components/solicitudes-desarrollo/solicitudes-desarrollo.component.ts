@@ -131,9 +131,6 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     'Líder técnico'
   ];
 
-  // ============================================================
-  // ESTADOS DISPONIBLES PARA EL FILTRO (SOLO LOS 4 REQUERIDOS)
-  // ============================================================
   estadosDisponibles: string[] = [
     'Enviada',
     'En desarrollo',
@@ -186,6 +183,10 @@ export class SolicitudesDesarrolloComponent implements OnInit {
           this.solicitudesFiltradas = [];
         }
         console.log('✅ Solicitudes cargadas:', this.solicitudes.length);
+        console.log('📊 Total requerimientos por solicitud:');
+        this.solicitudes.forEach(s => {
+          console.log(`  ${s.numeroSolicitud}: ${s.totalRequerimientos} requerimientos`);
+        });
       },
       error: (err: any) => {
         console.error('❌ Error al cargar solicitudes:', err);
@@ -195,20 +196,23 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     });
   }
 
+  // ============================================================
+  // MAPEAR SOLICITUD DESDE EL BACKEND (CORREGIDO)
+  // ============================================================
   private mapearSolicitud(item: any): SolicitudDesarrollo {
     let tieneImagenes = false;
     let totalReq = 0;
-    let observaciones = '';
 
+    // ✅ Usar el campo que viene del backend
+    if (item.totalRequerimientos !== undefined) {
+      totalReq = item.totalRequerimientos;
+    }
+
+    // Verificar si tiene imágenes (si el backend las envía)
     if (item.requerimientos && item.requerimientos.length > 0) {
-      totalReq = item.requerimientos.length;
       tieneImagenes = item.requerimientos.some((req: any) =>
         req.imagenes && req.imagenes.length > 0
       );
-    }
-
-    if (item.observaciones) {
-      observaciones = item.observaciones;
     }
 
     return {
@@ -225,7 +229,7 @@ export class SolicitudesDesarrolloComponent implements OnInit {
       funcionalAsignado: 'Funcional Asignado',
       totalRequerimientos: totalReq,
       tieneImagenes: tieneImagenes,
-      observaciones: observaciones
+      observaciones: item.observaciones || ''
     };
   }
 
@@ -333,7 +337,7 @@ export class SolicitudesDesarrolloComponent implements OnInit {
   }
 
   // ============================================================
-  // NAVEGACIÓN ENTRE PASOS DEL WIZARD (CON VALIDACIONES)
+  // NAVEGACIÓN ENTRE PASOS DEL WIZARD
   // ============================================================
   irPaso(paso: number): void {
     if (paso <= this.pasoActivo) {
