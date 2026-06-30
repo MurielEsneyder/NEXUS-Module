@@ -288,10 +288,7 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     this.solicitudSeleccionada = null;
   }
 
-  editarSolicitud(solicitud: SolicitudDesarrollo): void {
-    console.log('✏️ Editar solicitud:', solicitud.numeroSolicitud);
-  }
-
+  
   eliminarSolicitud(solicitud: SolicitudDesarrollo): void {
     if (confirm(`¿Está seguro que desea eliminar la solicitud ${solicitud.numeroSolicitud}?`)) {
       if (solicitud.id) {
