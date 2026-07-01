@@ -696,12 +696,14 @@ export class SolicitudesDesarrolloComponent implements OnInit {
         ...(this.solicitudActual.requerimientosFuncionales || []).map((req: RequerimientoItem) => ({
           tipoRequerimiento: 0,
           objetivo: req.descripcion,
-          detalle: req.descripcion
+          detalle: req.detalle || req.descripcion,
+          cargoImpactado: req.cargoImpactado || ''
         })),
         ...(this.solicitudActual.requerimientosNoFuncionales || []).map((req: RequerimientoItem) => ({
           tipoRequerimiento: 1,
           objetivo: req.descripcion,
-          detalle: req.descripcion
+          detalle: req.detalle || req.descripcion,
+          cargoImpactado: req.cargoImpactado || ''
         }))
       ]
     };
