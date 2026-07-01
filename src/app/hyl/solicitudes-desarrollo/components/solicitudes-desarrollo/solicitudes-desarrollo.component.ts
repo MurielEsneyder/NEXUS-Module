@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { SolicitudesDesarrolloService } from '../../services/solicitudes-desarrollo.service';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 // ============================================================
 // INTERFACES
 // ============================================================
 export interface RequerimientoItem {
   id: string;
   descripcion: string;
+  detalle?: string;
+  cargoImpactado?: string;
   archivos?: any[];
   tieneImagen?: boolean;
 }
@@ -233,6 +236,30 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     // ============================================================
     const areaNombre = this.areaMap[item.areaId] || 'Área no definida';
 
+    const reqFuncionales: RequerimientoItem[] = [];
+    const reqNoFuncionales: RequerimientoItem[] = [];
+
+    if (item.requerimientos && Array.isArray(item.requerimientos)) {
+      item.requerimientos.forEach((req: any) => {
+        const reqMapped: RequerimientoItem = {
+          id: req.id ? String(req.id) : '',
+          descripcion: req.objetivo || req.detalle || 'Sin descripción',
+          detalle: req.detalle || '',
+          cargoImpactado: req.cargoImpactado || '',
+          archivos: req.imagenes || []
+        };
+        
+        // Asignar ID si no viene, basado en el tipo
+        if (req.tipoRequerimiento === 0) {
+          reqMapped.id = reqMapped.id || `RF_${reqFuncionales.length + 1}`;
+          reqFuncionales.push(reqMapped);
+        } else if (req.tipoRequerimiento === 1) {
+          reqMapped.id = reqMapped.id || `RNF_${reqNoFuncionales.length + 1}`;
+          reqNoFuncionales.push(reqMapped);
+        }
+      });
+    }
+
     return {
       id: item.id,
       numeroSolicitud: item.codigo,
@@ -247,7 +274,9 @@ export class SolicitudesDesarrolloComponent implements OnInit {
       funcionalAsignado: 'Funcional Asignado',
       totalRequerimientos: totalReq,
       tieneImagenes: tieneImagenes,
-      observaciones: item.observaciones || ''
+      observaciones: item.observaciones || '',
+      requerimientosFuncionales: reqFuncionales,
+      requerimientosNoFuncionales: reqNoFuncionales
     };
   }
 
@@ -507,7 +536,7 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     }
   }
 
-  agregarRequerimiento(tipo: 'funcional' | 'noFuncional', descripcion: string): void {
+  agregarRequerimiento(tipo: 'funcional' | 'noFuncional', descripcion: string, cargo?: string, detalle?: string): void {
     if (!descripcion || descripcion.trim() === '') {
       alert('⚠️ Por favor ingrese una descripción para el requerimiento.');
       return;
@@ -524,6 +553,8 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     const nuevoReq: RequerimientoItem = {
       id: id,
       descripcion: descripcion.trim(),
+      detalle: detalle?.trim() || '',
+      cargoImpactado: cargo || '',
       archivos: this.archivoAdjuntoTemporal ? [{ ...this.archivoAdjuntoTemporal }] : []
     };
 
@@ -540,6 +571,27 @@ export class SolicitudesDesarrolloComponent implements OnInit {
     }
 
     this.archivoAdjuntoTemporal = null;
+  }
+
+  verAdjunto(req: RequerimientoItem): void {
+    if (!req.archivos || req.archivos.length === 0) {
+      alert('Este requerimiento no tiene archivos adjuntos.');
+      return;
+    }
+    const archivo = req.archivos[0];
+    if (archivo.url) {
+      window.open(archivo.url, '_blank');
+    } else if (archivo.base64) {
+      // Abrir el archivo desde base64 en una nueva pestaña
+      const byteCharacters = atob(archivo.base64.split(',')[1] || archivo.base64);
+      const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: archivo.tipo || 'application/octet-stream' });
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, '_blank');
+    } else {
+      alert('No se puede abrir el archivo. Intente descargándolo nuevamente.');
+    }
   }
 
   confirmarEliminarRequerimiento(tipo: 'funcional' | 'noFuncional', index: number): void {
@@ -710,7 +762,149 @@ export class SolicitudesDesarrolloComponent implements OnInit {
   }
 
   descargarSolicitudPDF(solicitud: SolicitudDesarrollo): void {
-    console.log('📄 Descargando PDF para:', solicitud.numeroSolicitud);
+    console.log('📄 Generando PDF para:', solicitud.numeroSolicitud);
+
+    const doc = new jsPDF();
+    
+    // Encabezado principal (Banda de color)
+    doc.setFillColor(59, 175, 182); // Color teal/turquesa similar al logo
+    doc.rect(0, 0, 210, 25, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ASMET SALUD - REQUERIMIENTO DE DESARROLLO', 10, 16);
+    
+    // Fecha y número de solicitud a la derecha
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    let fechaStr = 'No registrada';
+    if (solicitud.fechaCreacion) {
+      const fechaObj = new Date(solicitud.fechaCreacion);
+      if (!isNaN(fechaObj.getTime())) {
+        fechaStr = fechaObj.toLocaleDateString();
+      }
+    }
+    const headerRight = `Solicitud: ${solicitud.numeroSolicitud || 'N/A'}  |  Fecha: ${fechaStr}`;
+    doc.text(headerRight, 200, 16, { align: 'right' });
+    
+    let yPos = 30;
+
+    // Tabla: INFORMACIÓN DEL COLABORADOR
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 2, fontSize: 10, textColor: [0, 0, 0] },
+      headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold', textColor: [0, 0, 0] },
+      head: [['INFORMACIÓN DEL COLABORADOR', '']],
+      body: [
+        [`Nombre: ${solicitud.solicitante || 'No registrado'}`, `Correo: No registrado`],
+        [`Cargo: No registrado`, `Sede: No registrada`]
+      ],
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    yPos += 5;
+
+    // Tabla: INFORMACIÓN DE LA SOLICITUD
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 2, fontSize: 10, textColor: [0, 0, 0] },
+      headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold', textColor: [0, 0, 0] },
+      head: [['INFORMACIÓN DE LA SOLICITUD', '']],
+      body: [
+        [`Proceso Solicitante: No especificado`, `Área: ${solicitud.area || 'No especificada'}`],
+        [`Vicepresidencia: No especificada`, `Tipo de Solicitud: ${solicitud.tipo || 'No especificada'}`]
+      ],
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    yPos += 5;
+
+    // Tabla: IMPACTO DEL REQUERIMIENTO
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 3, fontSize: 10, textColor: [0, 0, 0] },
+      headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold', textColor: [0, 0, 0] },
+      head: [['IMPACTO DEL REQUERIMIENTO']],
+      body: [
+        [solicitud.observaciones && solicitud.observaciones.trim() !== '' ? solicitud.observaciones : 'Mejorará la eficiencia en la gestión...']
+      ],
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    yPos += 5;
+
+    // Tabla: REQUERIMIENTOS FUNCIONALES
+    const reqFuncionales = (solicitud.requerimientosFuncionales || []).map((r: any) => [
+      r.id,
+      `Obj: ${r.descripcion}\nCargo: ${r.cargoImpactado || 'No especificado'}`,
+      r.detalle || 'Sin detalles'
+    ]);
+    
+    if (reqFuncionales.length === 0) {
+       reqFuncionales.push(['N/A', 'No hay requerimientos funcionales registrados.', '']);
+    }
+
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 2, fontSize: 10, textColor: [0, 0, 0], lineWidth: 0.1, lineColor: [200, 200, 200] },
+      headStyles: { fillColor: [255, 255, 255], fontStyle: 'bold', textColor: [0, 0, 0] },
+      head: [
+        [{ content: 'REQUERIMIENTOS FUNCIONALES', colSpan: 3, styles: { fillColor: [240, 240, 240], lineWidth: 0 } }],
+        ['ID', 'Objetivo / Cargo', 'Detalles y Adjuntos']
+      ],
+      body: reqFuncionales,
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    yPos += 5;
+
+    // Tabla: REQUERIMIENTOS NO FUNCIONALES
+    const reqNoFuncionales = (solicitud.requerimientosNoFuncionales || []).map((r: any) => [
+      r.id,
+      `Obj: ${r.descripcion}\nCargo: ${r.cargoImpactado || 'No especificado'}`,
+      r.detalle || 'Sin detalles'
+    ]);
+
+    if (reqNoFuncionales.length === 0) {
+       reqNoFuncionales.push(['N/A', 'No hay requerimientos no funcionales registrados.', '']);
+    }
+
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 2, fontSize: 10, textColor: [0, 0, 0], lineWidth: 0.1, lineColor: [200, 200, 200] },
+      headStyles: { fillColor: [255, 255, 255], fontStyle: 'bold', textColor: [0, 0, 0] },
+      head: [
+        [{ content: 'REQUERIMIENTOS NO FUNCIONALES', colSpan: 3, styles: { fillColor: [240, 240, 240], lineWidth: 0 } }],
+        ['ID', 'Objetivo / Cargo', 'Detalles y Adjuntos']
+      ],
+      body: reqNoFuncionales,
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    yPos += 5;
+
+    // Tabla: REQUISITOS DE SEGURIDAD
+    autoTable(doc, {
+      startY: yPos,
+      theme: 'plain',
+      styles: { cellPadding: 2, fontSize: 9, textColor: [100, 100, 100] },
+      headStyles: { fillColor: [240, 240, 240], fontStyle: 'bold', textColor: [0, 0, 0], fontSize: 10 },
+      head: [['REQUISITOS DE SEGURIDAD']],
+      body: [
+        [`- Autentificación adecuada y control de accesos.\n- No uso de campos ocultos para información sensible.\n- Comprobación y validación de las entradas.\n- Control de límites de valores de salida.\n- Asegurar métodos de controles de seguridad privados/finales.\n- Evitar uso de datos reales de carácter personal en pruebas.`]
+      ],
+      didDrawPage: (data) => { yPos = data.cursor?.y || yPos; }
+    });
+
+    // Guardar PDF
+    const nombreArchivo = `Solicitud_Desarrollo_${solicitud.numeroSolicitud || new Date().getTime()}.pdf`;
+    doc.save(nombreArchivo);
   }
 
   esCandadoAbierto(solicitud: SolicitudDesarrollo): boolean {

@@ -106,8 +106,8 @@
               </span>
             </td>
             <td class="text-center">
-              <span *ngIf="solicitud.tieneImagenes" title="Tiene imágenes adjuntas" class="icono-imagen">🖼️</span>
-              <span *ngIf="!solicitud.tieneImagenes" title="Sin imágenes adjuntas" class="icono-sin-imagen">📄</span>
+              <span *ngIf="solicitud.tieneImagenes" title="Descargar PDF" class="icono-imagen" style="cursor: pointer; font-size: 1.3rem;" (click)="descargarSolicitudPDF(solicitud)">🖼️</span>
+              <span *ngIf="!solicitud.tieneImagenes" title="Descargar PDF" class="icono-sin-imagen" style="cursor: pointer; font-size: 1.3rem;" (click)="descargarSolicitudPDF(solicitud)">📄</span>
             </td>
             <td class="acciones-cell">
               <button class="btn-accion btn-ver" (click)="verDetalle(solicitud)" title="Ver detalle">👁️‍🗨️</button>
@@ -348,7 +348,7 @@
                     <td>{{ solicitudActual.fechaCreacion | date:'dd/MM/yyyy' }}</td>
                     <td>{{ req.id }}</td>
                     <td><span *ngIf="req.archivos && req.archivos.length > 0" title="Archivo adjunto: {{ req.archivos[0].nombre }}">📎 {{ req.archivos[0].nombre }}</span></td>
-                    <td><span class="radio-ver">⊙</span></td>
+                    <td><span class="radio-ver" style="cursor:pointer;" (click)="verAdjunto(req)" title="Ver adjunto">⊙</span></td>
                     <td><button class="btn-eliminar-req" (click)="confirmarEliminarRequerimiento('funcional', i)">🗑</button></td>
                   </tr>
                 </tbody>
@@ -357,7 +357,7 @@
           </div>
 
           <div class="agregar-req-footer">
-            <button class="btn-guardar-req" (click)="agregarRequerimiento('funcional', rfObjetivo.value); rfObjetivo.value=''; rfCargo.value=''; rfDetalle.value=''">Agregar requerimiento</button>
+            <button class="btn-guardar-req" (click)="agregarRequerimiento('funcional', rfObjetivo.value, rfCargo.value, rfDetalle.value); rfObjetivo.value=''; rfCargo.value=''; rfDetalle.value='';">Agregar requerimiento</button>
           </div>
           <div class="acciones-paso">
             <button class="btn-atras" (click)="irPaso(2)">Atras</button>
@@ -405,7 +405,7 @@
                     <td>{{ solicitudActual.fechaCreacion | date:'dd/MM/yyyy' }}</td>
                     <td>{{ req.id }}</td>
                     <td><span *ngIf="req.archivos && req.archivos.length > 0" title="Archivo adjunto: {{ req.archivos[0].nombre }}">📎 {{ req.archivos[0].nombre }}</span></td>
-                    <td><span class="radio-ver">⊙</span></td>
+                    <td><span class="radio-ver" style="cursor:pointer;" (click)="verAdjunto(req)" title="Ver adjunto">⊙</span></td>
                     <td><button class="btn-eliminar-req" (click)="confirmarEliminarRequerimiento('noFuncional', i)">🗑</button></td>
                   </tr>
                 </tbody>
@@ -414,7 +414,7 @@
           </div>
 
           <div class="agregar-req-footer">
-            <button class="btn-guardar-req" (click)="agregarRequerimiento('noFuncional', rnfObjetivo.value); rnfObjetivo.value=''; rnfCargo.value=''; rnfDetalle.value=''">Agregar requerimiento</button>
+            <button class="btn-guardar-req" (click)="agregarRequerimiento('noFuncional', rnfObjetivo.value, rnfCargo.value, rnfDetalle.value); rnfObjetivo.value=''; rnfCargo.value=''; rnfDetalle.value='';">Agregar requerimiento</button>
           </div>
           <div class="acciones-paso">
             <button class="btn-atras" (click)="irPaso(3)">Atras</button>

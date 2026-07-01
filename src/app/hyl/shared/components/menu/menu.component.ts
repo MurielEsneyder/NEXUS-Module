@@ -52,26 +52,30 @@ private getMenu(): void {
         console.log('MENU DATA:', menuData);
 
         const indexContratacion = menuData.findIndex(
-          (m: Menu) => m.title?.trim() === 'Contratacion'
+          (m: Menu) => {
+            const title = m.title?.trim().toLowerCase() || '';
+            return title.includes('contratacion') || title.includes('contratación');
+          }
         );
 
+        const nuevoItem: Menu = {
+          title: 'Solicitudes de Desarrollo',
+          url: '/solicitudes-desarrollo',
+          icon: 'assignment',
+          level: indexContratacion !== -1 ? menuData[indexContratacion].level : 1,
+          disabled: false,
+          open: false,
+          children: [],
+          roles: []
+        };
+
         if (indexContratacion !== -1) {
-
-          const nuevoItem: Menu = {
-            title: 'Solicitudes de Desarrollo',
-            url: '/solicitudes-desarrollo',
-            icon: 'assignment',
-            level: menuData[indexContratacion].level,
-            disabled: false,
-            open: false,
-            children: [],
-            roles: []
-          };
-
           menuData.splice(indexContratacion + 1, 0, nuevoItem);
-
-          console.log('Solicitudes de Desarrollo agregado');
+        } else {
+          menuData.push(nuevoItem);
         }
+
+        console.log('Solicitudes de Desarrollo agregado');
 
         this.menus = menuData;
 
